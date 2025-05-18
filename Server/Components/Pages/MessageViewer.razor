@@ -1,0 +1,57 @@
+﻿@page "/messages"
+@using Common.Base
+@using Microsoft.EntityFrameworkCore
+@using Server.Database
+@using Server.Models
+@using Server.Services
+@inject MessageService MessageSvc
+@rendermode InteractiveServer
+
+<h3>All Received Messages</h3>
+
+@if (messages is null)
+{
+    <p><em>Loading…</em></p>
+}
+else if (!messages.Any())
+{
+    <p><em>No messages yet.</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var m in messages)
+        {
+            <li>@m.SentAt.ToLocalTime(): <strong>@m.User</strong> — @m.Text</li>
+        }
+    </ul>
+
+    <ul>
+        @foreach (var m in characters)
+        {
+            <li>@Newtonsoft.Json.JsonConvert.SerializeObject(m)</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Message>? messages;
+
+    private List<Character>? characters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        messages = await MessageSvc.GetAllAsync();
+        characters = await MessageSvc.GetCharacters();
+
+        MessageSvc.MessageAdded += (message) =>
+        {
+            messages?.Add(message);
+            InvokeAsync(StateHasChanged);
+        };
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+    }
+}
