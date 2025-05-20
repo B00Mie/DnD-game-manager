@@ -78,6 +78,7 @@ namespace GMHelper.Forms
             cbRace.Size = new Size(121, 23);
             cbRace.TabIndex = 2;
             cbRace.SelectedIndexChanged += cbRace_SelectedIndexChanged;
+            cbRace.DropDownStyle = ComboBoxStyle.DropDownList;
             // 
             // label3
             // 

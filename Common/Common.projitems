@@ -9,6 +9,7 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Base\BasicStats.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\Character.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\CharacterClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\CharacterDto.cs" />

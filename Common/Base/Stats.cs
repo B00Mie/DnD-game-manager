@@ -10,14 +10,14 @@ namespace Common.Base
     {
         public int Id { get; set; } = 0;
         public int CharacterId { get; set; } = 0;
-        public int Strength;
-        public int Agility;
-        public int Intelligence;
-        public int Utility;
+        public int Strength { get; set; }
+        public int Agility { get; set; }
+        public int Intelligence { get; set; }
+        public int Utility { get; set; }
 
-        public int WaterMagickLvl;
-        public int IceMagickLvl;
-        public int EnergyMagickLvl;
+        public int WaterMagickLvl { get; set; }
+        public int IceMagickLvl { get; set; }
+        public int EnergyMagickLvl { get; set; }
 
         public Stats() { }
 

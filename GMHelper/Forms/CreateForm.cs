@@ -26,6 +26,8 @@ namespace GMHelper.Forms
             Array races = Enum.GetValues(typeof(RaceEnum));
 
             // Iterate over the enum values and add them to the ComboBox
+            cbRace.Items.Add("— Select Item —");
+            cbRace.SelectedIndex = 0;
             foreach (RaceEnum race in races)
             {
                 cbRace.Items.Add(race);
@@ -38,12 +40,12 @@ namespace GMHelper.Forms
 
             RaceEnum selectedRace = (RaceEnum)cbRace.SelectedIndex;
 
-            Race race = RaceFactory.CreateRace(selectedRace);
+            BasicStats stats = RaceFactory.CreateStatsByRace(selectedRace);
 
-            lblAgilityVal.Text = race.Stats.Agility.ToString();
-            lblStrengthVal.Text = race.Stats.Strength.ToString();
-            lblIntelligenceVal.Text = race.Stats.Intelligence.ToString();
-            lblUtilityVal.Text = race.Stats.Utility.ToString();
+            lblAgilityVal.Text = stats.Agility.ToString();
+            lblStrengthVal.Text = stats.Strength.ToString();
+            lblIntelligenceVal.Text = stats.Intelligence.ToString();
+            lblUtilityVal.Text = stats.Utility.ToString();
         }
 
         private async void btnCreate_Click(object sender, EventArgs e)

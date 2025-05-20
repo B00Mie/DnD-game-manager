@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Database;
 
@@ -10,9 +11,11 @@ using Server.Database;
 namespace Server.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518191236_raceSeed")]
+    partial class raceSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -41,65 +44,6 @@ namespace Server.Migrations
                     b.HasIndex("RaceId");
 
                     b.ToTable("Characters");
-                });
-
-            modelBuilder.Entity("Common.Base.CharacterSkills", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("GenerallSkillsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MagicSkillsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SkillPoints")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("WeaponSkillsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CharacterId")
-                        .IsUnique();
-
-                    b.HasIndex("GenerallSkillsId");
-
-                    b.HasIndex("MagicSkillsId");
-
-                    b.HasIndex("WeaponSkillsId");
-
-                    b.ToTable("CharacterSkills");
-                });
-
-            modelBuilder.Entity("Common.Base.InventoryItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CharacterId");
-
-                    b.ToTable("InventoryItems");
                 });
 
             modelBuilder.Entity("Common.Base.Race", b =>
@@ -262,6 +206,23 @@ namespace Server.Migrations
                     b.ToTable("SkillGroups");
                 });
 
+            modelBuilder.Entity("Common.Base.Stats", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.ToTable("Stats");
+                });
+
             modelBuilder.Entity("Server.Models.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -369,8 +330,7 @@ namespace Server.Migrations
 
                             b1.Property<string>("Name")
                                 .IsRequired()
-                                .HasColumnType("TEXT")
-                                .HasColumnName("ClassName");
+                                .HasColumnType("TEXT");
 
                             b1.HasKey("CharacterId");
 
@@ -380,92 +340,100 @@ namespace Server.Migrations
                                 .HasForeignKey("CharacterId");
                         });
 
-                    b.OwnsOne("Common.Base.Stats", "Stats", b1 =>
+                    b.OwnsOne("Common.Base.CharacterSkills", "CharacterSkills", b1 =>
                         {
                             b1.Property<int>("CharacterId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Agility")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("EnergyMagickLvl")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("IceMagickLvl")
+                            b1.Property<int>("GenerallSkillsId")
                                 .HasColumnType("INTEGER");
 
                             b1.Property<int>("Id")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Intelligence")
+                            b1.Property<int>("MagicSkillsId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Strength")
+                            b1.Property<int>("SkillPoints")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Utility")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("WaterMagickLvl")
+                            b1.Property<int>("WeaponSkillsId")
                                 .HasColumnType("INTEGER");
 
                             b1.HasKey("CharacterId");
+
+                            b1.HasIndex("GenerallSkillsId");
+
+                            b1.HasIndex("MagicSkillsId");
+
+                            b1.HasIndex("WeaponSkillsId");
 
                             b1.ToTable("Characters");
 
                             b1.WithOwner()
                                 .HasForeignKey("CharacterId");
+
+                            b1.HasOne("Common.Base.SkillGroup", "GenerallSkills")
+                                .WithMany()
+                                .HasForeignKey("GenerallSkillsId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.HasOne("Common.Base.SkillGroup", "MagicSkills")
+                                .WithMany()
+                                .HasForeignKey("MagicSkillsId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.HasOne("Common.Base.SkillGroup", "WeaponSkills")
+                                .WithMany()
+                                .HasForeignKey("WeaponSkillsId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("GenerallSkills");
+
+                            b1.Navigation("MagicSkills");
+
+                            b1.Navigation("WeaponSkills");
                         });
+
+                    b.OwnsMany("Common.Base.InventoryItem", "Inventory", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("CharacterId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id", "CharacterId");
+
+                            b1.HasIndex("CharacterId");
+
+                            b1.ToTable("InventoryItems");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CharacterId");
+                        });
+
+                    b.Navigation("CharacterSkills")
+                        .IsRequired();
 
                     b.Navigation("Class")
                         .IsRequired();
 
+                    b.Navigation("Inventory");
+
                     b.Navigation("Race");
-
-                    b.Navigation("Stats")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Common.Base.CharacterSkills", b =>
-                {
-                    b.HasOne("Common.Base.Character", null)
-                        .WithOne("CharacterSkills")
-                        .HasForeignKey("Common.Base.CharacterSkills", "CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Common.Base.SkillGroup", "GenerallSkills")
-                        .WithMany()
-                        .HasForeignKey("GenerallSkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Common.Base.SkillGroup", "MagicSkills")
-                        .WithMany()
-                        .HasForeignKey("MagicSkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Common.Base.SkillGroup", "WeaponSkills")
-                        .WithMany()
-                        .HasForeignKey("WeaponSkillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GenerallSkills");
-
-                    b.Navigation("MagicSkills");
-
-                    b.Navigation("WeaponSkills");
-                });
-
-            modelBuilder.Entity("Common.Base.InventoryItem", b =>
-                {
-                    b.HasOne("Common.Base.Character", null)
-                        .WithMany("Inventory")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Common.Base.Race", b =>
@@ -584,12 +552,19 @@ namespace Server.Migrations
                         .HasForeignKey("SkillGroupId");
                 });
 
+            modelBuilder.Entity("Common.Base.Stats", b =>
+                {
+                    b.HasOne("Common.Base.Character", null)
+                        .WithOne("Stats")
+                        .HasForeignKey("Common.Base.Stats", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Common.Base.Character", b =>
                 {
-                    b.Navigation("CharacterSkills")
+                    b.Navigation("Stats")
                         .IsRequired();
-
-                    b.Navigation("Inventory");
                 });
 
             modelBuilder.Entity("Common.Base.SkillGroup", b =>

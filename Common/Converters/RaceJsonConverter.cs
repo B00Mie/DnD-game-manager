@@ -15,10 +15,7 @@ namespace GMHelper.Converters
             string stats = jsonObject["Stats"].ToString();
             int id = jsonObject["Id"].ToObject<int>();
 
-            var statsObj = JsonConvert.DeserializeObject<Stats>(stats);
-
             var race = RaceFactory.CreateByName(raceType);   
-            race.Stats = statsObj;
             race.Id = id;
             return race;
         }

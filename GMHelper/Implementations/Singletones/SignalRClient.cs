@@ -32,10 +32,9 @@ namespace CharacterManager.Implementations.Singletones
 
         public static async Task InsertCharacter(Character character)
         {
-            string characterJson = Newtonsoft.Json.JsonConvert.SerializeObject(character);
             if (Connection.State == HubConnectionState.Disconnected)
                 await Connection.StartAsync();
-            await Connection.InvokeAsync("InsertCharacter", characterJson);
+            await Connection.InvokeAsync("InsertCharacter", character);
         }
     }
 }
