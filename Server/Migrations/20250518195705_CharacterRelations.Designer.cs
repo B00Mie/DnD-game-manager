@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Database;
 
@@ -10,9 +11,11 @@ using Server.Database;
 namespace Server.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518195705_CharacterRelations")]
+    partial class CharacterRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.5");
@@ -385,28 +388,7 @@ namespace Server.Migrations
                             b1.Property<int>("CharacterId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<int>("Agility")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("EnergyMagickLvl")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("IceMagickLvl")
-                                .HasColumnType("INTEGER");
-
                             b1.Property<int>("Id")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Intelligence")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Strength")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Utility")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("WaterMagickLvl")
                                 .HasColumnType("INTEGER");
 
                             b1.HasKey("CharacterId");

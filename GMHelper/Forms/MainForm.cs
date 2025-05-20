@@ -215,14 +215,14 @@ namespace GMHelper.Forms
         {
             lblCharacterName.Text = CurrentCharacter.Name;
             lblCharacterSubtitle.Text = $"Level {CurrentCharacter.Level} {CurrentCharacter.Class.Name}, {CurrentCharacter.Race.Name}";
-            lblStrengthVal.Text = CurrentCharacter.Race.Stats.Strength.ToString();
-            lblAgilityVal.Text = CurrentCharacter.Race.Stats.Agility.ToString();
-            lblIntelligenceVal.Text = CurrentCharacter.Race.Stats.Intelligence.ToString();
-            lblUtilityVal.Text = CurrentCharacter.Race.Stats.Utility.ToString();
+            lblStrengthVal.Text = CurrentCharacter.Stats.Strength.ToString();
+            lblAgilityVal.Text = CurrentCharacter.Stats.Agility.ToString();
+            lblIntelligenceVal.Text = CurrentCharacter.Stats.Intelligence.ToString();
+            lblUtilityVal.Text = CurrentCharacter.Stats.Utility.ToString();
 
-            int health = (CurrentCharacter.Race.BaseHP) + 25 * (CurrentCharacter.Race.Stats.Strength - CurrentCharacter.Race.BasicStats.Strength);
+            int health = (CurrentCharacter.Race.BaseHP) + 25 * (CurrentCharacter.Stats.Strength - CurrentCharacter.Race.BasicStats.Strength);
             lblHealthVal.Text = health.ToString();
-            lblMannaVal.Text = (CurrentCharacter.Race.Stats.Intelligence * 5).ToString();
+            lblMannaVal.Text = (CurrentCharacter.Stats.Intelligence * 5).ToString();
         }
 
         private void RedrawSkills()

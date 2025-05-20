@@ -14,17 +14,9 @@ namespace Common.Races
         {
             Name = GetType().Name;
             Type = RaceTypeEnum.CleanBlood.ToString();
-
-            Stats = new Stats(3, 1, 2, 1);
-            BasicStats = new Stats(3, 1, 2, 1);
             BaseHP = 325;
-        }
-        public void LevelUp()
-        {
-            Stats.Strength += 2;
-            Stats.Intelligence += 3;
-            Stats.Agility += 1;
-            Stats.Utility += 1;
+            NameRu = "Глубоководный";
+            TypeRu = "Чистокровный";
         }
     }
 }

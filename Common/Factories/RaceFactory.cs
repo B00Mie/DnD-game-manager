@@ -13,55 +13,57 @@ namespace Common.Factories
     {
         public static Race CreateRace(RaceEnum race)
         {
-            switch (race)
+            var stats = CreateStatsByRace(race);
+            Race? res = race switch
             {
-                case RaceEnum.Human:
-                    return new Human();
-                case RaceEnum.Dwarf:
-                    return new Dwarf();
-                case RaceEnum.Orc:
-                    return new Orc();
-                case RaceEnum.Khajiit:
-                    return new Khajiit();
-                case RaceEnum.Underwater:
-                    return new Underwater();
-                case RaceEnum.Drow:
-                    return new Drow();
-                case RaceEnum.WoodElf:
-                    return new WoodElf();
-                case RaceEnum.Winged:
-                    return new Winged();
-                case RaceEnum.Goblin:
-                    return new Goblin();
-                default: return new Human();
-            }
+                RaceEnum.Human => new Human(),
+                RaceEnum.Dwarf => new Dwarf(),
+                RaceEnum.Orc => new Orc(),
+                RaceEnum.Khajiit => new Khajiit(),
+                RaceEnum.Underwater => new Underwater(),
+                RaceEnum.Drow => new Drow(),
+                RaceEnum.WoodElf => new WoodElf(),
+                RaceEnum.Winged => new Winged(),
+                RaceEnum.Goblin => new Goblin(),
+                _ => new Human(),
+            };
+            res.BasicStats = stats;
+            res.Id = (int)race;
+            return res;
         }
 
         public static Race CreateByName(string name)
         {
-            switch (name)
+            return name switch
             {
-                case "Human":
-                    return new Human();
-                case "Dwarf":
-                    return new Dwarf();
-                case "Orc":
-                    return new Orc();
-                case "Khajiit":
-                    return new Khajiit();
-                case "Underwater":
-                    return new Underwater();
-                case "Drow":
-                    return new Drow();
-                case "WoodElf":
-                    return new WoodElf();
-                case "Winged":
-                    return new Winged();
-                case "Goblin":
-                    return new Goblin();
-                default: return new Human();
-            }
+                "Human" => new Human(),
+                "Dwarf" => new Dwarf(),
+                "Orc" => new Orc(),
+                "Khajiit" => new Khajiit(),
+                "Underwater" => new Underwater(),
+                "Drow" => new Drow(),
+                "WoodElf" => new WoodElf(),
+                "Winged" => new Winged(),
+                "Goblin" => new Goblin(),
+                _ => new Human(),
+            };
         }
 
+        public static BasicStats CreateStatsByRace(RaceEnum race)
+        {
+            return race switch
+            {
+                RaceEnum.Drow => new BasicStats(2, 3, 3, 2),
+                RaceEnum.Dwarf => new BasicStats(2, 1, 1, 3),
+                RaceEnum.Goblin => new BasicStats(1, 2, 3, 3),
+                RaceEnum.Human => new BasicStats(1, 1, 1, 1),
+                RaceEnum.Khajiit => new BasicStats(1, 4, 1, 1),
+                RaceEnum.Orc => new BasicStats(5, 1, 1, 3),
+                RaceEnum.Underwater => new BasicStats(3, 1, 2, 1),
+                RaceEnum.Winged => new BasicStats(2, 2, 3, 2),
+                RaceEnum.WoodElf => new BasicStats(3, 3, 1, 2),
+                _ => new BasicStats(1, 1, 1, 1),
+            };
+        }
     }
 }

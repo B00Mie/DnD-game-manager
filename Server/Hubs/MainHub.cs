@@ -1,5 +1,6 @@
 ﻿using Common.Base;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Server.Database;
 using Server.Models;
 using Server.Services;
@@ -36,9 +37,9 @@ namespace Server.Hubs
             await Clients.All.SendAsync("ReceiveEvent", $"{user}: {text}");
         }
 
-        public async void InsertCharacter(string characterJson)
+        public async void InsertCharacter(Character character)
         {
-            Character character = Newtonsoft.Json.JsonConvert.DeserializeObject<Character>(characterJson);
+            character.Race = null;
 
             await _dbContext.Characters.AddAsync(character);
             await _dbContext.SaveChangesAsync();

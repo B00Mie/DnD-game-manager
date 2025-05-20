@@ -16,17 +16,9 @@ namespace Common.Races
             Type = RaceTypeEnum.DirtyBlood.ToString();
 
             BaseHP = 350;
-            Stats = new Stats(2, 1, 1, 3);
-            BasicStats = new Stats(2, 1, 1, 3);
-            Id = 2;
+            NameRu = "Гном";
+            TypeRu = "Грязнокровка";
         }
 
-        public void LevelUp()
-        {
-            Stats.Strength += 3;
-            Stats.Intelligence += 1;
-            Stats.Agility += 1;
-            Stats.Utility += 3;
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Common.SkillsImplementation;
 using Common.Base;
 using Common.Enums;
+using Common.Factories;
 
 namespace Common.Races
 {
@@ -10,18 +11,8 @@ namespace Common.Races
         {
             Name = GetType().Name;
             Type = RaceTypeEnum.CleanBlood.ToString();
-
-            Stats = new Stats(1, 1, 1, 1);
-            BasicStats = new Stats(1, 1, 1, 1);
-            Id = 4;
-
-        }
-        public void LevelUp()
-        {
-            Stats.Strength += 1;
-            Stats.Intelligence += 2;
-            Stats.Agility += 2;
-            Stats.Utility += 2;
+            NameRu = "Человек";
+            TypeRu = "Чистокровный";
         }
     }
 }

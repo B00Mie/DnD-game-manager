@@ -1,3 +1,5 @@
+using Common.Enums;
+using Common.Factories;
 using Microsoft.EntityFrameworkCore;
 using Server.Components;
 using Server.Database;
@@ -13,6 +15,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddSingleton<MessageStore>();
 builder.Services.AddSingleton<MessageService>();
+builder.Services.AddSingleton<CharacterService>();
 
 
 builder.Services.AddSignalR();
@@ -22,6 +25,25 @@ builder.Services.AddDbContextFactory<MainDbContext>(opts =>
 
 
 var app = builder.Build();
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<MainDbContext>();
+//    // гарантируем, что база создана
+//    db.Database.Migrate();
+
+//    if (!db.Races.Any())
+//    {
+//        db.Races.AddRange(
+//            Enum.GetValues(typeof(RaceEnum))
+//                   .Cast<RaceEnum>()
+//                   .Select(RaceFactory.CreateRace)
+//                   .Select(x => x.ToBase())
+//                   .ToArray()
+//        );
+//        db.SaveChanges();
+//    }
+//}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
