@@ -38,6 +38,11 @@ namespace Server.Database
                  .HasForeignKey(c => c.RaceId)
                  .IsRequired();
 
+                b.HasMany(b => b.Skills)
+                .WithOne()
+                .HasForeignKey(c => c.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
+
                 b.HasMany(x => x.Inventory)
                 .WithOne()
                 .HasForeignKey(c => c.CharacterId)
@@ -52,13 +57,11 @@ namespace Server.Database
 
                 b.OwnsOne(c => c.Stats);
 
-                modelBuilder.Entity<Character>().HasOne(c => c.CharacterSkills).WithOne();
-
             });
             #endregion
 
-            
 
+            #region Race configuration
             modelBuilder.Entity<Drow>().HasBaseType<Race>();
             modelBuilder.Entity<Orc>().HasBaseType<Race>();
             modelBuilder.Entity<Dwarf>().HasBaseType<Race>();
@@ -73,8 +76,6 @@ namespace Server.Database
                          .Cast<RaceEnum>()
                          .Select(RaceFactory.CreateRace)
                          .ToArray();
-
-            // 2) сеедим только корневые свойства Race
             modelBuilder.Entity<Race>().HasData(
                 races.Select(r => new {
                     r.Id,
@@ -87,19 +88,16 @@ namespace Server.Database
                 .ToArray()
             );
 
-            // 3) конфигурируем BasicStats как owned-тип
             modelBuilder.Entity<Race>().OwnsOne(r => r.BasicStats, bs =>
             {
-                // опционально: задаём имена колонок
                 bs.Property(x => x.Strength).HasColumnName("BaseStrength");
                 bs.Property(x => x.Agility).HasColumnName("BaseAgility");
                 bs.Property(x => x.Intelligence).HasColumnName("BaseIntelligence");
                 bs.Property(x => x.Utility).HasColumnName("BaseUtility");
 
-                // 4) теперь сеедим сами поля BasicStats
                 bs.HasData(
                     races.Select(r => new {
-                        RaceId = r.Id,                  // FK на таблицу Race
+                        RaceId = r.Id, 
                         r.BasicStats.Strength,
                         r.BasicStats.Agility,
                         r.BasicStats.Intelligence,
@@ -108,6 +106,7 @@ namespace Server.Database
                     .ToArray()
                 );
             });
+            #endregion
 
 
             //var raceTypes = typeof(Race).Assembly.GetTypes()

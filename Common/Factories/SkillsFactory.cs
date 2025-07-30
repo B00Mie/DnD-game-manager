@@ -1,76 +1,99 @@
 ﻿using Common.Base;
+using Common.Base.Enums;
 using Common.Enums;
 
 namespace Common.Factories
 {
     public static class SkillsFactory
     {
-        public static CharacterSkills CreateSkillsByRace(RaceEnum race)
+        public static List<Skill> CreateSkillsByRace(RaceEnum race)
         {
-            return new CharacterSkills
+            var result = race switch
             {
-                GenerallSkills = CreateGeneralSkillsByRace(race),
-                MagicSkills = CreateMagicSkillsByRace(race),
-                WeaponSkills = CreateWeaponSkillsByRace(race)
+                RaceEnum.Human => new List<Skill>
+                        {
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.General},
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Drow => new List<Skill>
+                        {
+                            new() { Name = "Stealth", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Darkvision", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Goblin => new List<Skill>
+                        {
+                            new() { Name = "Sneak", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Trap Setting", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Khajiit => new List<Skill>
+                        {
+                            new() { Name = "Claw Attack", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Night Vision", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Underwater => new List<Skill>
+                        {
+                            new() { Name = "Swim", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Water Breathing", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Winged => new List<Skill>
+                        {
+                            new() { Name = "Fly", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Aerial Combat", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.WoodElf => new List<Skill>
+                        {
+                            new() { Name = "Archery", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Nature Lore", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Orc => new List<Skill>
+                        {
+                            new() { Name = "Berserk", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Intimidation", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                RaceEnum.Dwarf => new List<Skill>
+                        {
+                            new() { Name = "Stonecunning", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Craftsmanship", Level = 1, SkillGroup = SkillGroupEnum.General },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
+                        },
+                _ => throw new NotImplementedException(),
             };
-        }
-
-        private static SkillGroup CreateGeneralSkillsByRace(RaceEnum race)
-        {
-            SkillGroup skillGroup = new SkillGroup
-            {
-                GroupName = "General",
-                Skills = race switch
-                {
-                    RaceEnum.Human => new List<Skill>
-                        {
-                            new() { Name = "Diplomacy", Level = 1 },
-                            new() { Name = "Leadership", Level = 1 }
-                        },
-                    RaceEnum.Drow => new List<Skill>
-                        {
-                            new() { Name = "Stealth", Level = 1 },
-                            new() { Name = "Darkvision", Level = 1 }
-                        },
-                    RaceEnum.Goblin => new List<Skill>
-                        {
-                            new() { Name = "Sneak", Level = 1 },
-                            new() { Name = "Trap Setting", Level = 1 }
-                        },
-                    RaceEnum.Khajiit => new List<Skill>
-                        {
-                            new() { Name = "Claw Attack", Level = 1 },
-                            new() { Name = "Night Vision", Level = 1 }
-                        },
-                    RaceEnum.Underwater => new List<Skill>
-                        {
-                            new() { Name = "Swim", Level = 1 },
-                            new() { Name = "Water Breathing", Level = 1 }
-                        },
-                    RaceEnum.Winged => new List<Skill>
-                        {
-                            new() { Name = "Fly", Level = 1 },
-                            new() { Name = "Aerial Combat", Level = 1 }
-                        },
-                    RaceEnum.WoodElf => new List<Skill>
-                        {
-                            new() { Name = "Archery", Level = 1 },
-                            new() { Name = "Nature Lore", Level = 1 }
-                        },
-                    RaceEnum.Orc => new List<Skill>
-                        {
-                            new() { Name = "Berserk", Level = 1 },
-                            new() { Name = "Intimidation", Level = 1 }
-                        },
-                    RaceEnum.Dwarf => new List<Skill>
-                        {
-                            new() { Name = "Stonecunning", Level = 1 },
-                            new() { Name = "Craftsmanship", Level = 1 }
-                        },
-                    _ => throw new NotImplementedException(),
-                }
-            };
-            return skillGroup;
+            return result;
         }
 
         private static SkillGroup CreateMagicSkillsByRace(RaceEnum race)
@@ -83,48 +106,48 @@ namespace Common.Factories
                 {
                     RaceEnum.Human => new List<Skill>
                         {
-                            new() { Name = "Diplomacy", Level = 1 },
-                            new() { Name = "Leadership", Level = 1 }
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Drow => new List<Skill>
                         {
-                            new() { Name = "Stealth", Level = 1 },
-                            new() { Name = "Darkvision", Level = 1 }
+                            new() { Name = "Stealth", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Darkvision", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Goblin => new List<Skill>
                         {
-                            new() { Name = "Sneak", Level = 1 },
-                            new() { Name = "Trap Setting", Level = 1 }
+                            new() { Name = "Sneak", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Trap Setting", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Khajiit => new List<Skill>
                         {
-                            new() { Name = "Claw Attack", Level = 1 },
-                            new() { Name = "Night Vision", Level = 1 }
+                            new() { Name = "Claw Attack", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Night Vision", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Underwater => new List<Skill>
                         {
-                            new() { Name = "Swim", Level = 1 },
-                            new() { Name = "Water Breathing", Level = 1 }
+                            new() { Name = "Swim", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Water Breathing", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Winged => new List<Skill>
                         {
-                            new() { Name = "Fly", Level = 1 },
-                            new() { Name = "Aerial Combat", Level = 1 }
+                            new() { Name = "Fly", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Aerial Combat", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.WoodElf => new List<Skill>
                         {
-                            new() { Name = "Archery", Level = 1 },
-                            new() { Name = "Nature Lore", Level = 1 }
+                            new() { Name = "Archery", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Nature Lore", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Orc => new List<Skill>
                         {
-                            new() { Name = "Berserk", Level = 1 },
-                            new() { Name = "Intimidation", Level = 1 }
+                            new() { Name = "Berserk", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Intimidation", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     RaceEnum.Dwarf => new List<Skill>
                         {
-                            new() { Name = "Stonecunning", Level = 1 },
-                            new() { Name = "Craftsmanship", Level = 1 }
+                            new() { Name = "Stonecunning", Level = 1, SkillGroup = SkillGroupEnum.Magic },
+                            new() { Name = "Craftsmanship", Level = 1, SkillGroup = SkillGroupEnum.Magic }
                         },
                     _ => throw new NotImplementedException(),
                 }
@@ -142,48 +165,48 @@ namespace Common.Factories
                 {
                     RaceEnum.Human => new List<Skill>
                         {
-                            new() { Name = "Diplomacy", Level = 1 },
-                            new() { Name = "Leadership", Level = 1 }
+                            new() { Name = "Diplomacy", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Leadership", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Drow => new List<Skill>
                         {
-                            new() { Name = "Stealth", Level = 1 },
-                            new() { Name = "Darkvision", Level = 1 }
+                            new() { Name = "Stealth", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Darkvision", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Goblin => new List<Skill>
                         {
-                            new() { Name = "Sneak", Level = 1 },
-                            new() { Name = "Trap Setting", Level = 1 }
+                            new() { Name = "Sneak", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Trap Setting", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Khajiit => new List<Skill>
                         {
-                            new() { Name = "Dagger", Level = 1 },
-                            new() { Name = "Bow", Level = 1 }
+                            new() { Name = "Dagger", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Bow", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Underwater => new List<Skill>
                         {
-                            new() { Name = "Swim", Level = 1 },
-                            new() { Name = "Water Breathing", Level = 1 }
+                            new() { Name = "Swim", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Water Breathing", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Winged => new List<Skill>
                         {
-                            new() { Name = "Fly", Level = 1 },
-                            new() { Name = "Aerial Combat", Level = 1 }
+                            new() { Name = "Fly", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Aerial Combat", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.WoodElf => new List<Skill>
                         {
-                            new() { Name = "Archery", Level = 1 },
-                            new() { Name = "Nature Lore", Level = 1 }
+                            new() { Name = "Archery", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Nature Lore", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Orc => new List<Skill>
                         {
-                            new() { Name = "Berserk", Level = 1 },
-                            new() { Name = "Intimidation", Level = 1 }
+                            new() { Name = "Berserk", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Intimidation", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     RaceEnum.Dwarf => new List<Skill>
                         {
-                            new() { Name = "Mace", Level = 1 },
-                            new() { Name = "Axe", Level = 1 }
+                            new() { Name = "Mace", Level = 1, SkillGroup = SkillGroupEnum.Weapon },
+                            new() { Name = "Axe", Level = 1, SkillGroup = SkillGroupEnum.Weapon }
                         },
                     _ => throw new NotImplementedException(),
                 }

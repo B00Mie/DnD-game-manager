@@ -3,16 +3,13 @@ using CharacterManager.Implementations.Singletones;
 using Common.Base;
 using Common.Enums;
 using Common.Factories;
-using Newtonsoft.Json;
 
 namespace GMHelper.Forms
 {
     public partial class CreateForm : Form
     {
-        private DbContext _context;
         public CreateForm()
         {
-            _context = DbContext.Instance;
             InitializeComponent();
         }
 
@@ -50,27 +47,12 @@ namespace GMHelper.Forms
 
         private async void btnCreate_Click(object sender, EventArgs e)
         {
-            Character character = new Character(txtCharacterName.Text, (RaceEnum)cbRace.SelectedIndex,"ClassPlaceholder");
-
-            string json = JsonConvert.SerializeObject(character);
-
-            string commonDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Character Manager");
-
-            // Ensure that the directory exists, create it if it doesn't
-            if (!Directory.Exists(commonDirectoryPath))
+            Character character = new(txtCharacterName.Text, (RaceEnum)cbRace.SelectedIndex, "ClassPlaceholder")
             {
-                Directory.CreateDirectory(commonDirectoryPath);
-            }
+                CreatedBy = SignalRClient.UserId
+            };
 
-            // Define the path to the file in the common directory
-            string filePath = Path.Combine(commonDirectoryPath, $"{txtCharacterName.Text}.json");
-
-            // Write the JSON string to the file
-            File.WriteAllText(filePath, json);
-
-            //_context.Characters.Insert(character);
-
-            await SignalRClient.SendMessageAsync(character.Name, "Character created & user connected!");
+            await SignalRClient.SendMessageAsync(character.CreatedBy.ToString(), "Character created & user connected!");
 
             await SignalRClient.InsertCharacter(character);
 

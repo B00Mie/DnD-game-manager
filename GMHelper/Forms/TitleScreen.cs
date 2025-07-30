@@ -1,3 +1,5 @@
+using CharacterManager.Implementations.Singletones;
+using Common.Base;
 using Common.Factories;
 using GMHelper.Factories;
 using GMHelper.Forms;
@@ -21,31 +23,53 @@ namespace GMHelper
             createForm.Show();
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
+        private async void btnLoad_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            var data = await SignalRClient.GetCharacters();
 
-
-            openFileDialog.Title = "Load Character";
-            openFileDialog.Filter = "Text Files (*.json)|*.json|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory =
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Character Manager");
-
-            // Show the dialog and capture the result
-            DialogResult result = openFileDialog.ShowDialog();
-
-            // Check if the user clicked OK
-            if (result == DialogResult.OK)
+            if (data.Any())
             {
-                // Get the selected file path
-                string filePath = openFileDialog.FileName;
+                var menu = new ContextMenuStrip();
+                foreach (var ch in data)
+                {
+                    var item = menu.Items.Add(ch.Name);
+                    item.Tag = ch;
+                    item.Click += (s2, e2) =>
+                    {
+                        this.Hide();
+                        new MainForm(ch).Show();
+                    };
+                }
 
-                var character = ReadWriteFactory.ReadCharacter(filePath);
-
-
-                this.Hide();
-                new MainForm(character).Show();
+                menu.Show(btnLoad, new Point(0, btnLoad.Height));
             }
+            else
+            {
+                MessageBox.Show("No characters found.");
+            }
+
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            //openFileDialog.Title = "Load Character";
+            //openFileDialog.Filter = "Text Files (*.json)|*.json|All Files (*.*)|*.*";
+            //openFileDialog.InitialDirectory =
+            //Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Character Manager");
+
+            //// Show the dialog and capture the result
+            //DialogResult result = openFileDialog.ShowDialog();
+
+            //// Check if the user clicked OK
+            //if (result == DialogResult.OK)
+            //{
+            //    // Get the selected file path
+            //    string filePath = openFileDialog.FileName;
+
+            //    var character = ReadWriteFactory.ReadCharacter(filePath);
+
+
+            //    
+            //    new MainForm(character).Show();
+            //}
         }
     }
 }

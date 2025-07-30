@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Base\CharacterSkills.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\Enums\RaceEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\Enums\RaceTypeEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Base\Enums\SkillGroupEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\InventoryItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\Race.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Base\Races\Drow.cs" />

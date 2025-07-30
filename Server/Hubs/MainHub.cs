@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Server.Database;
+using Server.Migrations;
 using Server.Models;
 using Server.Services;
 using System.Text.Json;
@@ -45,6 +46,71 @@ namespace Server.Hubs
             await _dbContext.SaveChangesAsync();
             await Clients.All.SendAsync("ReceiveEvent", $"{character.Name} added");
         }
+
+        public async void UpdateCharacter(Character character)
+        {
+            var existingCharacter = await _dbContext.Characters
+                                                    .Include(c => c.Stats)
+                                                    .FirstOrDefaultAsync(c => c.Id == character.Id);
+            if (existingCharacter != null)
+            {
+                existingCharacter.Skills = character.Skills;
+                existingCharacter.SkillPoints = character.SkillPoints;
+                existingCharacter.Stats = character.Stats;
+                await _dbContext.SaveChangesAsync();
+                await Clients.All.SendAsync("ReceiveEvent", $"{character.Name} updated");
+            }
+            else
+            {
+                await Clients.All.SendAsync("ReceiveEvent", $"Character not found");
+            }
+        }
+
+        public async void LevelUpCharacter(Stats stats, int level, int skillPoints, Guid charaterGuid)
+        {
+            await _dbContext.Characters
+                        .Where(c => c.Guid == charaterGuid)
+                        .ExecuteUpdateAsync(upd => upd
+                            .SetProperty(c => c.Stats.Intelligence, _ => stats.Intelligence)
+                            .SetProperty(c => c.Stats.Strength, _ => stats.Strength)
+                            .SetProperty(c => c.Stats.Agility, _ => stats.Agility)
+                            .SetProperty(c => c.Stats.Utility, _ => stats.Utility)
+                            .SetProperty(c => c.Level, _ => level)
+                            .SetProperty(c => c.SkillPoints, _ => skillPoints)
+                        );
+        }
+
+        public async void UpdateSkills(CharacterSkills skills, Guid charaterGuid)
+        {
+            var character = await _dbContext.Characters
+            .Include(c => c.Skills)
+                             .FirstAsync(c => c.Guid == charaterGuid);
+
+            _dbContext.Skills.RemoveRange(character.Skills);
+
+            // create new
+            character.Skills = skills.Skills.Select(d => new Skill
+            {
+                CharacterId = character.Id,
+                SkillGroup = d.SkillGroup,
+                Name = d.Name,
+                Level = d.Level
+            }).ToList();
+            character.SkillPoints = skills.SkillPoints;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Character>> GetCharacters(Guid clientGuid)
+        {
+            var data = await _dbContext.Characters.Where(x=> x.CreatedBy == clientGuid)
+                                        .Include(c => c.Race).Include(c => c.Stats)
+                                        .Include(c => c.Class)
+                                        .Include(c => c.Skills)
+                                        .OrderBy(m => m.Id)
+                                        .ToListAsync();
+            return data;
+        } 
 
     }
 }

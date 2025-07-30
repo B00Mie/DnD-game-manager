@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Base.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,9 @@ namespace Common.Base
     public class Skill
     {
         public int Id { get; set; } = 0;
-        public string Name { get; set; }
+        public int CharacterId { get; set; } = 0;
+        public SkillGroupEnum SkillGroup { get; set; } = SkillGroupEnum.General;
+        public string Name { get; set; } = string.Empty;
         public int Level { get; set; }
     }
 }

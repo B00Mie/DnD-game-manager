@@ -8,15 +8,18 @@ namespace Common.Base
     public class Character
     {
         public int Id { get; set; }
+        public Guid Guid { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public int RaceId { get; set; } = 0;
         public int Level { get; set; } = 1;
         public int BaseHP { get; set; } = 200;
+        public Guid CreatedBy { get; set; } = Guid.Empty;
 
         public CharacterClass Class { get; set; }
         public Stats Stats { get; set; }
-        public CharacterSkills CharacterSkills { get; set; } = new CharacterSkills();
-        //[JsonConverter(typeof(RaceJsonConverter))]
+        
+        public List<Skill> Skills { get; set; } = new List<Skill>();
+        public int SkillPoints { get; set; } = 0;
         public Race Race { get; set; }
 
 
@@ -34,9 +37,10 @@ namespace Common.Base
             Class = new CharacterClass(@class);
             Race = RaceFactory.CreateRace(raceEnum);
             Level = level;
-            CharacterSkills = SkillsFactory.CreateSkillsByRace(raceEnum);
+            Skills = SkillsFactory.CreateSkillsByRace(raceEnum);
 
             Stats = Race.BasicStats.ToStats();
+            Stats.CharacterId = Id;
             BaseHP = Race.BaseHP;
 
         }
@@ -47,7 +51,7 @@ namespace Common.Base
             Race = RaceFactory.CreateRace(race);
             RaceId = (int) race;
             Class = new CharacterClass(charClass);
-            CharacterSkills = SkillsFactory.CreateSkillsByRace(race);
+            Skills = SkillsFactory.CreateSkillsByRace(race);
             Stats = Race.BasicStats.ToStats();
             BaseHP = Race.BaseHP;
 
@@ -117,7 +121,7 @@ namespace Common.Base
                     Stats.Utility += 2;
                     break;
             }
-            CharacterSkills.SkillPoints += 1;
+            this.SkillPoints += 1;
         }
 
 

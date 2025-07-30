@@ -1,16 +1,12 @@
 using CharacterManager.Implementations.Singletones;
-using Common.Base;
-using GMHelper.Converters;
-using Common.Factories;
-using GMHelper.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net.Http.Json;
+using CharacterManager.Properties;
 
 namespace GMHelper
 {
     internal static class Program
     {
+
+        public static Guid ClientGuid { get; private set; }
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -23,6 +19,16 @@ namespace GMHelper
             SignalRClient.InitializeAsync();
 
             ApplicationConfiguration.Initialize();
+
+            var g = Settings.Default.ClientGuid;
+            if (g == Guid.Empty)
+            {
+                g = Guid.NewGuid();
+                Settings.Default.ClientGuid = g;
+                Settings.Default.Save();
+            }
+
+            ClientGuid = g;
 
             /////////////////TODO
             //string commonDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Character Manager");

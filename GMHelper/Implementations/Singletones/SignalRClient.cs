@@ -1,4 +1,5 @@
-﻿using Common.Base;
+﻿using CharacterManager.Properties;
+using Common.Base;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,14 @@ namespace CharacterManager.Implementations.Singletones
                 .WithAutomaticReconnect()
                 .Build();
 
+        public static Guid UserId { get; set; } = Settings.Default.ClientGuid;
+
         public static async Task InitializeAsync()
         {
             if (Connection.State == HubConnectionState.Disconnected)
                 await Connection.StartAsync();
         }
+        
 
         public static async Task SendMessageAsync(string user, string text)
         {
@@ -35,6 +39,35 @@ namespace CharacterManager.Implementations.Singletones
             if (Connection.State == HubConnectionState.Disconnected)
                 await Connection.StartAsync();
             await Connection.InvokeAsync("InsertCharacter", character);
+        }
+
+        public static async Task UpdateCharacter(Character character)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("UpdateCharacter", character);
+        }
+
+        public static async Task LevelUpCharacter(Stats stats, int level, int skillPoints, Guid characterGuid)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("LevelUpCharacter", stats, level, skillPoints, characterGuid);
+        }
+
+        public static async Task UpdateSkills(CharacterSkills skills, Guid characterGuid)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("UpdateSkills", skills, characterGuid);
+        }
+
+        public static async Task<IEnumerable<Character>> GetCharacters()
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            var result = await Connection.InvokeAsync<IEnumerable<Character>>("GetCharacters", UserId);
+            return result;
         }
     }
 }

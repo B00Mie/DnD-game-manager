@@ -1,5 +1,6 @@
 ﻿using CharacterManager.UserControls;
 using Common.Base;
+using Common.Base.Enums;
 
 namespace CharacterManager.Forms
 {
@@ -11,14 +12,19 @@ namespace CharacterManager.Forms
         private int _skillPointsLeft = 0;
         private List<PropertyControll> _propertyControlls = new();
 
-        public SkillsForm(CharacterSkills skills)
+        public SkillsForm(CharacterSkills characterSkills)
         {
-            _characterSkills = skills;
-            _skillPointsLeft = skills.SkillPoints;
+            _characterSkills = characterSkills;
+            _skillPointsLeft = characterSkills.SkillPoints;
             InitializeComponent();
-            GeneratePropertyControls(skills.GenerallSkills, 10, 50);
-            GeneratePropertyControls(skills.MagicSkills, 250, 50);
-            GeneratePropertyControls(skills.WeaponSkills, 500, 50);
+
+            var generalSkills = characterSkills.Skills.Where(x => x.SkillGroup == SkillGroupEnum.General);
+            var weaponSkills = characterSkills.Skills.Where(x => x.SkillGroup == SkillGroupEnum.Weapon);
+            var magicSkills = characterSkills.Skills.Where(x => x.SkillGroup == SkillGroupEnum.Magic);
+
+            GeneratePropertyControls(generalSkills, 10, 50);
+            GeneratePropertyControls(magicSkills, 250, 50);
+            GeneratePropertyControls(weaponSkills, 500, 50);
             RefreshButtons();
         }
 
@@ -28,24 +34,27 @@ namespace CharacterManager.Forms
         }
 
 
-        private void GeneratePropertyControls(SkillGroup skillGroup, int xPos, int startingYpos)
+        private void GeneratePropertyControls(IEnumerable<Skill> skills, int xPos, int startingYpos)
         {
+            SkillGroupEnum skillGroup = skills.FirstOrDefault().SkillGroup;
             Label groupName = new()
             {
-                Text = skillGroup.GroupName,
+                Text = skillGroup.ToString(),
                 Location = new Point(xPos, startingYpos),
                 AutoSize = true,
                 Font = new Font("Arial", 12, FontStyle.Bold)
             };
             this.Controls.Add(groupName);
-            foreach (var skill in skillGroup.Skills)
+
+            for(int i = 0; i < skills.Count(); i++)
             {
-                int y = (startingYpos + 20) + (30 * skillGroup.Skills.IndexOf(skill));
+                var skill = skills.ElementAt(i);
+                int y = (startingYpos + 20) + (30 * i);
                 PropertyControll propertyControl = new()
                 {
                     PropertyName = skill.Name,
                     PropertyValue = skill.Level.ToString(),
-                    GroupName = skillGroup.GroupName,
+                    GroupName = skillGroup.ToString(),
                     Location = new Point(xPos, y),
                     AutoSize = true
                 };
@@ -58,6 +67,10 @@ namespace CharacterManager.Forms
 
                 this.Controls.Add(propertyControl);
                 _propertyControlls.Add(propertyControl);
+            }
+            foreach (var skill in skills)
+            {
+                
             }
         }
 
@@ -99,8 +112,7 @@ namespace CharacterManager.Forms
             skillLevel--;
             propertyControl.PropertyValue = skillLevel.ToString();
 
-            var currentSkill = _characterSkills.GetSkillGroupByName(propertyControl.GroupName).Skills
-                 .FirstOrDefault(x => x.Name == propertyControl.PropertyName);
+            var currentSkill = _characterSkills.Skills.FirstOrDefault(x => x.Name == propertyControl.PropertyName && x.SkillGroup.ToString() == propertyControl.GroupName);
 
             if (_skillPointsLeft > 0)
             {
@@ -129,8 +141,7 @@ namespace CharacterManager.Forms
             _characterSkills.SkillPoints = _skillPointsLeft;
             foreach (var property in _propertyControlls)
             {
-                var currentSkill = _characterSkills.GetSkillGroupByName(property.GroupName).Skills
-                    .FirstOrDefault(x => x.Name == property.PropertyName);
+                var currentSkill = _characterSkills.Skills.FirstOrDefault(x => x.Name == property.PropertyName && x.SkillGroup.ToString() == property.GroupName);
                 currentSkill.Level = int.Parse(property.PropertyValue);
             }
 
@@ -143,8 +154,7 @@ namespace CharacterManager.Forms
 
             foreach (var property in _propertyControlls)
             {
-                var currentSkill = _characterSkills.GetSkillGroupByName(property.GroupName).Skills
-                    .FirstOrDefault(x => x.Name == property.PropertyName);
+                var currentSkill = _characterSkills.Skills.FirstOrDefault(x => x.Name == property.PropertyName && x.SkillGroup.ToString() == property.GroupName);
                 int skillpointsNeeded = currentSkill.Level + 1;
 
                 if (skillpointsNeeded <= _skillPointsLeft)

@@ -4,6 +4,8 @@ using Common.Base;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using CharacterManager.Implementations.Singletones;
+using Common.Base.Enums;
 
 namespace GMHelper.Forms
 {
@@ -202,10 +204,12 @@ namespace GMHelper.Forms
             lbInventory.SelectedIndex = lastIndex;
         }
 
-        private void tsLevelUp_Click(object sender, EventArgs e)
+        private async void tsLevelUp_Click(object sender, EventArgs e)
         {
             CurrentCharacter.Level++;
             CurrentCharacter.LevelUp();
+
+            await SignalRClient.LevelUpCharacter(CurrentCharacter.Stats, CurrentCharacter.Level, CurrentCharacter.SkillPoints, CurrentCharacter.Guid);
 
             RedrawStats();
 
@@ -232,19 +236,24 @@ namespace GMHelper.Forms
             lsWeaponSkills.Items.Clear();
             lsMagicSkills.Items.Clear();
 
-            foreach (var skill in CurrentCharacter.CharacterSkills.GenerallSkills.Skills)
+
+            var gerenallSkills = CurrentCharacter.Skills.Where(x => x.SkillGroup == SkillGroupEnum.General);
+            var weaponSkills = CurrentCharacter.Skills.Where(x => x.SkillGroup == SkillGroupEnum.Weapon);
+            var magicSkills = CurrentCharacter.Skills.Where(x => x.SkillGroup == SkillGroupEnum.Magic);
+
+            foreach (var skill in gerenallSkills)
             {
                 lsGeneralSkills.Items.Add($"{skill.Name}: {skill.Level}");
 
             }
 
-            foreach (var skill in CurrentCharacter.CharacterSkills.WeaponSkills.Skills)
+            foreach (var skill in weaponSkills)
             {
                 lsWeaponSkills.Items.Add($"{skill.Name}: {skill.Level}");
 
             }
 
-            foreach (var skill in CurrentCharacter.CharacterSkills.MagicSkills.Skills)
+            foreach (var skill in magicSkills)
             {
                 lsMagicSkills.Items.Add($"{skill.Name}: {skill.Level}");
 
@@ -281,13 +290,21 @@ namespace GMHelper.Forms
             Application.Exit();
         }
 
-        private void tsAddSkills_Click(object sender, EventArgs e)
+        private async void tsAddSkills_Click(object sender, EventArgs e)
         {
-            SkillsForm form = new(CurrentCharacter.CharacterSkills);
+            var characterSkills = new CharacterSkills() 
+            {
+                Skills = CurrentCharacter.Skills,
+                SkillPoints = CurrentCharacter.SkillPoints
+            };
+            SkillsForm form = new(characterSkills);
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                CurrentCharacter.CharacterSkills = form.CharacterSkills;
+                CurrentCharacter.Skills = form.CharacterSkills.Skills;
+                CurrentCharacter.SkillPoints = form.CharacterSkills.SkillPoints;
+
+                await SignalRClient.UpdateSkills(form.CharacterSkills, CurrentCharacter.Guid);
                 RedrawSkills();
             }
         }
