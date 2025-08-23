@@ -21,6 +21,7 @@ namespace Server.Services
             await using var db = _dbFactory.CreateDbContext();
             return await db.Characters
                            .Include(c => c.Race)
+                           .Include(c => c.Inventory)
                            .OrderBy(m => m.Id)
                            .ToListAsync();
         }

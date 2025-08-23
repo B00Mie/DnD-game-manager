@@ -64,12 +64,12 @@ else
                             <p><strong>Skill Points:</strong> @ch.SkillPoints</p>
 
                             <h6>Inventory</h6>
-                            @if (ch.Inventory?.Any() == true)
+                            @if (ch.Inventory?.Count > 0)
                             {
                                 <ul class="list-unstyled small">
                                     @foreach (var item in ch.Inventory)
                                     {
-                                        <li>@item.Name &times; @item.Description</li>
+                                        <li>@item.Name &times; @(string.IsNullOrWhiteSpace(item.Description) ? "No description available" : item.Description)</li>
                                     }
                                 </ul>
                             }

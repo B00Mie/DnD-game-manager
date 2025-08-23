@@ -12,6 +12,8 @@ namespace Common.Base
         public int CharacterId { get; set; } = 0;
         public string Name { get; set; }
         public string Description { get; set; } = "";
+        //public int Quantity { get; set; } = 1;
+        public InventoryItem() { }
         public InventoryItem(string name) 
         {
             Name = name;

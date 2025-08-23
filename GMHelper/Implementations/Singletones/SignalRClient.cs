@@ -61,6 +61,24 @@ namespace CharacterManager.Implementations.Singletones
                 await Connection.StartAsync();
             await Connection.InvokeAsync("UpdateSkills", skills, characterGuid);
         }
+        public static async Task AddInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("AddInventoryItem", item, characterGuid);
+        }
+        public static async Task RemoveInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("RemoveInventoryItem", item, characterGuid);
+        }
+        public static async Task UpdateInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            if (Connection.State == HubConnectionState.Disconnected)
+                await Connection.StartAsync();
+            await Connection.InvokeAsync("UpdateInventoryItem", item, characterGuid);
+        }
 
         public static async Task<IEnumerable<Character>> GetCharacters()
         {

@@ -101,6 +101,49 @@ namespace Server.Hubs
             await _dbContext.SaveChangesAsync();
         }
 
+        public async void AddInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            var character = await _dbContext.Characters
+                .Include(c => c.Inventory)
+                .FirstOrDefaultAsync(c => c.Guid == characterGuid);
+            if (character != null)
+            {
+                character.Inventory.Add(item);
+                await _dbContext.SaveChangesAsync();
+                await Clients.All.SendAsync("ReceiveEvent", $"{item.Name} added to {character.Name}'s inventory");
+            }
+        }
+        public async void RemoveInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            var character = await _dbContext.Characters
+                .Include(c => c.Inventory)
+                .FirstOrDefaultAsync(c => c.Guid == characterGuid);
+            if (character != null)
+            {
+                character.Inventory.Remove(item);
+                await _dbContext.SaveChangesAsync();
+                await Clients.All.SendAsync("ReceiveEvent", $"{item.Name} removed from {character.Name}'s inventory");
+            }
+        }
+        public async void UpdateInventoryItem(InventoryItem item, Guid characterGuid)
+        {
+            var character = await _dbContext.Characters
+                .Include(c => c.Inventory)
+                .FirstOrDefaultAsync(c => c.Guid == characterGuid);
+            if (character != null)
+            {
+                var existingItem = character.Inventory.FirstOrDefault(i => i.Id == item.Id);
+                if (existingItem != null)
+                {
+                    existingItem.Name = item.Name;
+                    existingItem.Description = item.Description;
+                    //existingItem.Quantity = item.Quantity;
+                    await _dbContext.SaveChangesAsync();
+                    await Clients.All.SendAsync("ReceiveEvent", $"{item.Name} updated in {character.Name}'s inventory");
+                }
+            }
+        }
+
         public async Task<IEnumerable<Character>> GetCharacters(Guid clientGuid)
         {
             var data = await _dbContext.Characters.Where(x=> x.CreatedBy == clientGuid)

@@ -37,30 +37,35 @@ namespace GMHelper.Forms
 
         }
 
-        private void btnAddItem_Click(object sender, EventArgs e)
+        private async void btnAddItem_Click(object sender, EventArgs e)
         {
-            InventoryItem item = new InventoryItem(txtInventoryItem.Text);
+            InventoryItem item = new(txtInventoryItem.Text);
 
             lbInventory.Items.Add(item);
+            await SignalRClient.AddInventoryItem(item,CurrentCharacter.Guid);
             txtInventoryItem.Clear();
         }
 
-        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lbInventory.SelectedItem != null)
+            if (lbInventory.SelectedItem is InventoryItem item)
             {
                 txtInventoryItem.Text = lbInventory.SelectedItem.ToString();
                 lbInventory.Items.Remove(lbInventory.SelectedItem);
-            };
+                await SignalRClient.RemoveInventoryItem(item, CurrentCharacter.Guid);
+            }
+            ;
 
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lbInventory.SelectedItem != null)
+            if (lbInventory.SelectedItem is InventoryItem item)
             {
                 lbInventory.Items.Remove(lbInventory.SelectedItem);
-            };
+                await SignalRClient.RemoveInventoryItem(item, CurrentCharacter.Guid);
+            }
+            ;
         }
 
         private void lbInventory_MouseDown(object sender, MouseEventArgs e)
@@ -110,7 +115,7 @@ namespace GMHelper.Forms
         {
         }
 
-        private void addDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void addDescriptionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             InventoryItem? item = lbInventory.SelectedItem as InventoryItem;
 
@@ -123,6 +128,7 @@ namespace GMHelper.Forms
                 {
                     item.Description = description;
                     lbInventory.SelectedItem = item;
+                    await SignalRClient.UpdateInventoryItem(item, CurrentCharacter.Guid);
                 }
 
             }
